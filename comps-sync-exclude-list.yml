@@ -200,7 +200,6 @@ desktop_exclude_list:
     - dnfdragora
     - plasma-pk-updates
     # Misc
-    - ksshaskpass
     - kwebkitpart
     # Remove some NetworkManager plugins that pull-in lesser used VPN packages
     - plasma-nm-l2tp
