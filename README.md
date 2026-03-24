@@ -31,7 +31,7 @@ In the Fedora infrastructure, composes are made via
 - for Rawhide and branched composes:
   [forge.fedoraproject.org/releng/pungi-fedora](https://forge.fedoraproject.org/releng/pungi-fedora)
 - for stable releases:
-  [pagure.io/fedora-infra](https://pagure.io/fedora-infra/ansible/blob/main/f/roles/bodhi2/backend/templates/pungi.rpm.conf.j2)
+  [forge.fedoraproject.org/infra/ansible](https://forge.fedoraproject.org/infra/ansible/src/branch/main/roles/bodhi2/backend/templates/pungi.rpm.conf.j2)
 
 Installer ISOs are built using [Lorax](https://github.com/weldr/lorax) and
 additional templates:
