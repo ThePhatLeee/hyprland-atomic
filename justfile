@@ -161,7 +161,7 @@ compose-legacy variant=default_variant:
     mkdir -p repo cache logs
     if [[ ! -f "repo/config" ]]; then
         pushd repo > /dev/null || exit 1
-        ostree init --repo . --mode=bare-user
+        ostree init --repo . --mode=archive-z2
         popd > /dev/null || exit 1
     fi
     # Set option to reduce fsync for transient builds
