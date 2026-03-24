@@ -14,6 +14,7 @@ The currently official Fedora Atomic Desktop variants are:
 - Fedora Kinoite
 - Fedora Sway Atomic
 - Fedora Budgie Atomic
+- Fedora COSMIC Atomic
 
 Reach out to the SIG if you are interested in creating and maintaining a new
 Atomic variant.
@@ -76,8 +77,9 @@ The goal is to eventually use a similar CI pipeline-centric flow, with signing a
 The sources for the
 [Silverblue](https://fedoraproject.org/atomic-desktops/silverblue/),
 [Kinoite](https://fedoraproject.org/atomic-desktops/kinoite/),
-[Sway Atomic](https://fedoraproject.org/atomic-desktops/sway/) and
-[Budgie Atomic](https://fedoraproject.org/atomic-desktops/budgie/) websites are
+[Sway Atomic](https://fedoraproject.org/atomic-desktops/sway/),
+[Budgie Atomic](https://fedoraproject.org/atomic-desktops/budgie/), and
+[COSMIC Atomic](https://fedoraproject.org/atomic-desktops/cosmic/) websites are
 in [gitlab.com/fedora/fedora-websites-3.0](https://gitlab.com/fedora/websites-apps/fedora-websites/fedora-websites-3.0).
 
 ## Issue trackers
