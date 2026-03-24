@@ -180,7 +180,7 @@ compose-legacy variant=default_variant:
         "--unified-core"
     )
     if [[ {{force_nocache}} == "true" ]]; then
-        ARGS+=(" --force-nocache")
+        ARGS+=("--force-nocache")
     fi
     CMD="rpm-ostree"
     if [[ ${EUID} -ne 0 ]]; then
