@@ -129,10 +129,10 @@ Example to do a local build of Fedora Silverblue:
 $ git clone https://pagure.io/workstation-ostree-config && cd workstation-ostree-config
 
 # Build the classic ostree commits (currently the default in Fedora)
-$ just compose-legacy variant=silverblue
+$ just compose-legacy silverblue
 
 # Or build the new ostree native container (not default yet, still in development)
-$ just compose-image variant=silverblue
+$ just compose-image silverblue
 ```
 
 ## Testing
