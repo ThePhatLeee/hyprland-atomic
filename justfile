@@ -443,6 +443,74 @@ upload-container variant=default_variant arch=default_arch:
     # Cleanup private key
     rm private.key.b64 private.key
 
+# Upload a container to an anonymous registry. Useful for local builds
+upload-container-simple variant=default_variant arch=default_arch:
+    #!/bin/bash
+    set -euxo pipefail
+
+    {{retry_function}}
+
+    variant={{variant}}
+    arch={{arch}}
+
+    declare -A pretty_names={{pretty_names}}
+    variant_pretty=${pretty_names[$variant]-}
+    if [[ -z $variant_pretty ]]; then
+        echo "Unknown variant"
+        exit 1
+    fi
+
+    if [[ -z ${REGISTRY+x} ]] || [[ -z ${RELEASE_REPO+x} ]]; then
+        echo "Skipping: No REGISTRY or RELEASE_REPO set"
+        exit 1
+    fi
+
+    buildid=""
+    if [[ -f ".buildid" ]]; then
+        buildid="$(< .buildid)"
+    else
+        echo "Skipping: No '.buildid' file"
+        exit 1
+    fi
+
+    version=""
+    if [[ "$(git rev-parse --abbrev-ref HEAD)" == "main" ]] || [[ -f "fedora-rawhide.repo" ]]; then
+        version="rawhide"
+    else
+        version="$(rpm-ostree compose tree --print-only --repo=repo ${variant}.yaml | jq -r '."mutate-os-release"')"
+    fi
+
+    if [[ -n ${CI_REGISTRY_USER+x} ]] || [[ -n ${CI_REGISTRY_PASSWORD+x} ]]; then
+        # Login to the registry
+        retry 5 60 skopeo login --username "${CI_REGISTRY_USER}" --password "${CI_REGISTRY_PASSWORD}" "${REGISTRY}"
+    fi
+
+    image="${REGISTRY}/${RELEASE_REPO}/${variant}"
+
+    # Only append arch suffix if requested
+    suffix=""
+    if [[ ${arch} != "default" ]]; then
+        suffix="-${arch}"
+    fi
+
+    SKOPEO_ARGS=(
+        "--retry-times" "3"
+        "--dest-tls-verify=false"
+    )
+
+    # Support for the zstd:chunked format is not ready yet
+    SKOPEO_ARGS+=("--dest-compress-format")
+    if [[ ${version} == "rawhide" ]] || [[ ${version} == "43" ]]; then
+        SKOPEO_ARGS+=("zstd")
+    else
+        SKOPEO_ARGS+=("gzip")
+    fi
+
+    # Push fully versioned tag (major version, build date/id, arch)
+    retry 5 60 skopeo copy "${SKOPEO_ARGS[@]}" \
+        "oci-archive:${variant}.ociarchive" \
+        "docker://${image}:${version}.${buildid}${suffix}"
+
 # Create a multi-arch manifest for a given variant, push it to a registry and sign it
 multi-arch-manifest variant=default_variant:
     #!/bin/bash

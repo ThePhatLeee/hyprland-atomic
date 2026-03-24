@@ -70,14 +70,12 @@ $ just compose-legacy silverblue
 
 ### Publish an ostree image
 
-Instructions to test the resulting build for classic ostree commits:
-
-- First, serve the ostree repo using an HTTP server. You can use any static
-  file server. For example using
-  <https://github.com/TheWaWaR/simple-http-server>:
+Serve the ostree repo using an HTTP server. You can use any static
+file server. For example using
+<https://github.com/TheWaWaR/simple-http-server>:
 
 ```
-simple-http-server --index --ip 192.168.122.1 --port 8000
+$ simple-http-server --index --ip 192.168.122.1 --port 8000
 ```
 
 ### Install the ostree image
@@ -86,16 +84,16 @@ On an already installed Silverblue system:
 
 ```
 # Pin the currently deployed (and probably working) version
-sudo ostree admin pin 0
+$ sudo ostree admin pin 0
 
 # Add an ostree remote
-sudo ostree remote add testremote http://192.168.122.1:8000/repo --no-gpg-verify
+$ sudo ostree remote add testremote http://192.168.122.1:8000/repo --no-gpg-verify
 
 # List refs from variant remote
-sudo ostree remote refs testremote
+$ sudo ostree remote refs testremote
 
 # Switch to your variant
-sudo rpm-ostree rebase testremote:fedora/rawhide/x86_64/silverblue
+$ sudo rpm-ostree rebase testremote:fedora/rawhide/x86_64/silverblue
 
 # Reboot and test!
 ```
@@ -111,7 +109,19 @@ $ just compose-image silverblue
 
 ### Publish the container image
 
-Push the OCI archive to a container registry
+Serve the container image using a local insecure container image registry.
+
+```
+# Run a local container image registry
+$ podman run -d -p 5000:5000 --name local-registry registry:2
+
+# Push the ociarchive to the image registry
+$ REGISTRY=192.168.122.1:5000 RELEASE_REPO=fedora \
+  just upload-container-simple
+
+# Examine the output for the OCI image location, e.g.:
+# 192.168.122.2:5000/fedora/silverblue:rawhide.20260324.0
+```
 
 ### Install the container image
 
@@ -119,10 +129,16 @@ On an already installed Silverblue system:
 
 ```
 # Pin the currently deployed (and probably working) version
-sudo ostree admin pin 0
+$ sudo ostree admin pin 0
+
+$ sudo tee -a /etc/containers/registries.conf.d/localdev.conf <<EOF
+[[registry]]
+location="192.168.122.1:5000"
+insecure=true
+EOF
 
 # Switch to your variant
-$ rpm-ostree rebase ostree-unverified-image:registry:<oci image>
+$ sudo rpm-ostree rebase ostree-unverified-image:registry:192.168.122.1:5000/fedora/silverblue:rawhide.20260324.0
 
 # Reboot and test!
 ```
