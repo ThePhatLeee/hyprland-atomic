@@ -37,6 +37,98 @@ Installer ISOs are built using [Lorax](https://github.com/weldr/lorax) and
 additional templates:
 [pagure.io/fedora-lorax-templates](https://pagure.io/fedora-lorax-templates).
 
+## Getting started
+
+If you'd like to build an Atomic system image, you'll need to clone this repo and check out the
+release branch you want to work with, then build, publish, and install the image.
+
+Currently, the default image type in Fedora is "ostree", while container images are
+still in development. You can build either type.
+
+All commonly used commands are listed as recipes in the
+[justfile](https://pagure.io/workstation-ostree-config/blob/main/f/justfile) (see
+[Just](https://github.com/casey/just)).
+
+## Clone this repo
+
+```
+# Clone the config
+$ git clone https://pagure.io/workstation-ostree-config && cd workstation-ostree-config
+
+# Check out a release branch (unless you want a rawhide image)
+$ git checkout f45
+```
+
+## ostree image
+
+### Build an ostree image
+
+```
+# Build the classic ostree commits (currently the default in Fedora)
+$ just compose-legacy silverblue
+```
+
+### Publish an ostree image
+
+Instructions to test the resulting build for classic ostree commits:
+
+- First, serve the ostree repo using an HTTP server. You can use any static
+  file server. For example using
+  <https://github.com/TheWaWaR/simple-http-server>:
+
+```
+simple-http-server --index --ip 192.168.122.1 --port 8000
+```
+
+### Install the ostree image
+
+On an already installed Silverblue system:
+
+```
+# Pin the currently deployed (and probably working) version
+sudo ostree admin pin 0
+
+# Add an ostree remote
+sudo ostree remote add testremote http://192.168.122.1:8000/repo --no-gpg-verify
+
+# List refs from variant remote
+sudo ostree remote refs testremote
+
+# Switch to your variant
+sudo rpm-ostree rebase testremote:fedora/rawhide/x86_64/silverblue
+
+# Reboot and test!
+```
+
+## Container image
+
+### Build a container image
+
+```
+# Build the new ostree native container (not default yet, still in development)
+$ just compose-image silverblue
+```
+
+### Publish the container image
+
+Push the OCI archive to a container registry
+
+### Install the container image
+
+On an already installed Silverblue system:
+
+```
+# Pin the currently deployed (and probably working) version
+sudo ostree admin pin 0
+
+# Switch to your variant
+$ rpm-ostree rebase ostree-unverified-image:registry:<oci image>
+
+# Reboot and test!
+```
+
+See [URL format for ostree native containers](https://coreos.github.io/rpm-ostree/container/#url-format-for-ostree-native-containers) for details.
+
 ## Compose Methods and Outputs
 
 There are a few different ways Fedora Atomic Desktop images are currently produced.
@@ -115,66 +207,6 @@ Documentation sources:
 - [Sway Atomic](https://gitlab.com/fedora/sigs/sway/sericea-docs)
 - Budgie Atomic (to be determined)
 - COSMIC Atomic (to be determined)
-
-## Building
-
-All commonly used commands are listed as recipes in the
-[justfile](https://pagure.io/workstation-ostree-config/blob/main/f/justfile) (see
-[Just](https://github.com/casey/just)).
-
-Example to do a local build of Fedora Silverblue:
-
-```
-# Clone the config
-$ git clone https://pagure.io/workstation-ostree-config && cd workstation-ostree-config
-
-# Build the classic ostree commits (currently the default in Fedora)
-$ just compose-legacy silverblue
-
-# Or build the new ostree native container (not default yet, still in development)
-$ just compose-image silverblue
-```
-
-## Testing
-
-Instructions to test the resulting build for classic ostree commits:
-
-- First, serve the ostree repo using an HTTP server. You can use any static
-  file server. For example using
-  <https://github.com/TheWaWaR/simple-http-server>:
-
-```
-simple-http-server --index --ip 192.168.122.1 --port 8000
-```
-
-- Then, on an already installed Silverblue system:
-
-```
-# Add an ostree remote
-sudo ostree remote add testremote http://192.168.122.1:8000/repo --no-gpg-verify
-
-# Pin the currently deployed (and probably working) version
-sudo ostree admin pin 0
-
-# List refs from variant remote
-sudo ostree remote refs testremote
-
-# Switch to your variant
-sudo rpm-ostree rebase testremote:fedora/rawhide/x86_64/silverblue
-
-# Reboot and test!
-```
-
-Instructions to test the resulting build for ostree native containers:
-
-- Push the OCI archive to a container registry
-- Rebase to it:
-
-```
-$ rpm-ostree rebase ostree-unverified-image:registry:<oci image>
-```
-
-See [URL format for ostree native containers](https://coreos.github.io/rpm-ostree/container/#url-format-for-ostree-native-containers) for details.
 
 ## Syncing with Fedora Comps
 
