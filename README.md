@@ -85,18 +85,20 @@ in [gitlab.com/fedora/fedora-websites-3.0](https://gitlab.com/fedora/websites-ap
 ## Issue trackers
 
 Issues common to all Fedora Atomic Desktops are tracked in
-[gitlab.com/fedora/ostree/sig](https://gitlab.com/fedora/ostree/sig/-/issues).
+[forge.fedoraproject.org/atomic-desktops](https://forge.fedoraproject.org/atomic-desktops/tracker/issues).
 
 Desktop specific issues should be filed in their respective issue trackers:
 
 - [Silverblue](https://github.com/fedora-silverblue/issue-tracker/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
     - See also the [Workstation issue tracker](https://pagure.io/fedora-workstation/issues?status=Open&order_key=last_updated&order=desc)
-- [Kinoite](https://pagure.io/fedora-kde/SIG/issues?status=Open&order_key=last_updated&order=desc)
+- [Kinoite](https://forge.fedoraproject.org/kde/tracker/issues)
   ([KDE SIG](https://fedoraproject.org/wiki/SIGs/KDE))
 - [Sway Atomic](https://gitlab.com/fedora/sigs/sway/SIG/-/issues)
   ([Sway SIG](https://fedoraproject.org/wiki/SIGs/Sway))
 - [Budgie Atomic](https://pagure.io/fedora-budgie/project/issues?status=Open&order_key=last_updated&order=desc)
   ([Budgie SIG](https://fedoraproject.org/wiki/SIGs/Budgie))
+- [COSMIC Atomic](https://forge.fedoraproject.org/cosmic/SIG/issues)
+  ([COSMIC SIG](https://fedoraproject.org/wiki/SIGs/COSMIC))
 
 ## Documentation
 
@@ -112,6 +114,7 @@ Documentation sources:
 - [Kinoite](https://pagure.io/fedora-kde/kinoite-docs)
 - [Sway Atomic](https://gitlab.com/fedora/sigs/sway/sericea-docs)
 - Budgie Atomic (to be determined)
+- COSMIC Atomic (to be determined)
 
 ## Building
 
