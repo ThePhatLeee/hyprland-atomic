@@ -213,20 +213,13 @@ compose-image variant=default_variant:
 
     just validate > /dev/null || (echo "Failed manifest validation" && exit 1)
 
-    mkdir -p repo cache
-    if [[ ! -f "repo/config" ]]; then
-        pushd repo > /dev/null || exit 1
-        ostree init --repo . --mode=bare-user
-        popd > /dev/null || exit 1
-    fi
-    # Set option to reduce fsync for transient builds
-    ostree --repo=repo config set 'core.fsync' 'false'
+    mkdir -p cache
 
     buildid="$(date '+%Y%m%d.0')"
     timestamp="$(date --iso-8601=sec)"
     echo "${buildid}" > .buildid
 
-    version="$(rpm-ostree compose tree --print-only --repo=repo ${variant}.yaml | jq -r '."mutate-os-release"')"
+    version="$(rpm-ostree compose tree --print-only ${variant}.yaml | jq -r '."mutate-os-release"')"
     echo "Composing ${variant_pretty} ${version}.${buildid} ..."
 
     ARGS=(
