@@ -220,26 +220,16 @@ Make a PR similar to
 [ansible#1318](https://pagure.io/fedora-infra/ansible/pull-request/1318) in
 [fedora-infra/ansible](https://pagure.io/fedora-infra/ansible).
 
-### On Rawhide / main branch
+### This repo
+
+Use the branch recipe to create the new release branch and update the main
+branch:
 
 ```
-sed -i "s/45/46/g" *.repo comps-sync.py
-sed -i "s/releasever: 45/releasever: 46/" common.yaml
-sed -i --follow-symlinks "s/# - fedora-45/# - fedora-46/" *.yaml
-mv fedora-45.repo fedora-46.repo
-mv fedora-45-updates.repo fedora-46-updates.repo
-sed -i "s/46/46/g" README.md
-sed -i "s/45/46/g" README.md
+just branch <release>
 ```
 
-### On the new branch (f45)
-
-```
-rm fedora-rawhide.repo
-sed -i --follow-symlinks "/- fedora-rawhide/d" *.yaml
-sed -i --follow-symlinks "s/# - fedora-45/- fedora-45/" *.yaml
-sed -i "s/releasever_ref: \"rawhide\"/releasever_ref: \"45\"/" common.yaml
-```
+Push the new changes in both branches.
 
 ## Historical references
 

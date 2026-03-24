@@ -70,6 +70,25 @@ all: validate
 validate:
     ./ci/validate
 
+branch release:
+    git checkout main
+    # exit if branching the repo fails, possibly already exists
+    git branch f{{release}} || exit 1
+    sed -i "s/{{release}}/$(( {{release}} + 1 ))/g" comps-sync.py README.md
+    sed -i "s/releasever: {{release}}/releasever: $(( {{release}} + 1 ))/" common.yaml
+    git add comps-sync.py common.yaml README.md
+    git commit -m "Update main branch to $(( {{release}} + 1 ))"
+
+    git checkout f{{release}}
+    git rm fedora-rawhide.repo
+    sed -i --follow-symlinks "/- fedora-rawhide/d" *.yaml
+    sed -i --follow-symlinks "s/# - fedora/- fedora/" *.yaml
+    sed -i --follow-symlinks "s/# - updates/- updates/" *.yaml
+    sed -i "s/releasever_ref: \"rawhide\"/releasever_ref: \"{{release}}\"/" common.yaml
+    git add *.yaml
+    git commit -m "Update configs for branch f{{release}}"
+
+
 # Comps-sync, but without pulling latest
 sync:
     #!/bin/bash
