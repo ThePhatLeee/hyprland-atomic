@@ -29,7 +29,7 @@ In the Fedora infrastructure, composes are made via
 [pungi](https://pagure.io/pungi) with the configuration from:
 
 - for Rawhide and branched composes:
-  [pagure.io/pungi-fedora](https://pagure.io/pungi-fedora)
+  [forge.fedoraproject.org/releng/pungi-fedora](https://forge.fedoraproject.org/releng/pungi-fedora)
 - for stable releases:
   [pagure.io/fedora-infra](https://pagure.io/fedora-infra/ansible/blob/main/f/roles/bodhi2/backend/templates/pungi.rpm.conf.j2)
 
