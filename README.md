@@ -119,7 +119,7 @@ Documentation sources:
 ## Building
 
 All commonly used commands are listed as recipes in the
-[justfile](https://github.com/casey/just) (see
+[justfile](https://pagure.io/workstation-ostree-config/blob/main/f/justfile) (see
 [Just](https://github.com/casey/just)).
 
 Example to do a local build of Fedora Silverblue:
