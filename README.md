@@ -3,18 +3,11 @@
 This is the configuration needed to create
 [rpm-ostree](https://coreos.github.io/rpm-ostree/) based, desktop variants of
 Fedora, also known as
-[Fedora Atomic Desktops](https://fedoraproject.org/atomic-desktops/).
+[Fedora Atomic Desktops](https://fedoraproject.org/atomic-desktops/). See the
+Atomic Desktops project for more information about all of the variants.
 
 This repo is managed by the
 [Fedora Atomic Desktops SIG](https://fedoraproject.org/wiki/SIGs/AtomicDesktops).
-
-The currently official Fedora Atomic Desktop variants are:
-
-- Fedora Silverblue
-- Fedora Kinoite
-- Fedora Sway Atomic
-- Fedora Budgie Atomic
-- Fedora COSMIC Atomic
 
 Reach out to the SIG if you are interested in creating and maintaining a new
 Atomic variant.
@@ -147,7 +140,7 @@ See [URL format for ostree native containers](https://coreos.github.io/rpm-ostre
 
 ## Compose Methods and Outputs
 
-There are a few different ways Fedora Atomic Desktop images are currently produced.
+There are a few different ways Fedora Atomic Desktop images are currently produced within Fedora's infrastructure.
 
 ### 1. Official Pungi Compose (OSTree Commit)
 
@@ -179,50 +172,6 @@ For testing and development purposes, an unofficial set of OCI images are built 
 - **Details**: These images are unofficial and intended for testing. Unlike the official OCI images, they are `cosign` signed, retain historical tags, and are subject to a 4-week expiry policy on the container registry.
 
 The goal is to eventually use a similar CI pipeline-centric flow, with signing and historical tags, for the official releases.
-
-## Website
-
-The sources for the
-[Silverblue](https://fedoraproject.org/atomic-desktops/silverblue/),
-[Kinoite](https://fedoraproject.org/atomic-desktops/kinoite/),
-[Sway Atomic](https://fedoraproject.org/atomic-desktops/sway/),
-[Budgie Atomic](https://fedoraproject.org/atomic-desktops/budgie/), and
-[COSMIC Atomic](https://fedoraproject.org/atomic-desktops/cosmic/) websites are
-in [gitlab.com/fedora/fedora-websites-3.0](https://gitlab.com/fedora/websites-apps/fedora-websites/fedora-websites-3.0).
-
-## Issue trackers
-
-Issues common to all Fedora Atomic Desktops are tracked in
-[forge.fedoraproject.org/atomic-desktops](https://forge.fedoraproject.org/atomic-desktops/tracker/issues).
-
-Desktop specific issues should be filed in their respective issue trackers:
-
-- [Silverblue](https://github.com/fedora-silverblue/issue-tracker/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
-    - See also the [Workstation issue tracker](https://forge.fedoraproject.org/workstation/tickets/issues?q=&type=all&sort=recentupdate&state=open)
-- [Kinoite](https://forge.fedoraproject.org/kde/tracker/issues)
-  ([KDE SIG](https://fedoraproject.org/wiki/SIGs/KDE))
-- [Sway Atomic](https://gitlab.com/fedora/sigs/sway/SIG/-/issues)
-  ([Sway SIG](https://fedoraproject.org/wiki/SIGs/Sway))
-- [Budgie Atomic](https://pagure.io/fedora-budgie/project/issues?status=Open&order_key=last_updated&order=desc)
-  ([Budgie SIG](https://fedoraproject.org/wiki/SIGs/Budgie))
-- [COSMIC Atomic](https://forge.fedoraproject.org/cosmic/SIG/issues)
-  ([COSMIC SIG](https://fedoraproject.org/wiki/SIGs/COSMIC))
-
-## Documentation
-
-The documentation for Fedora Atomic variants is currently duplicated for each
-variant at [Atomic Desktops](https://docs.fedoraproject.org/en-US/emerging/).
-
-There are plans to unify the documentation:
-[ostree/sig#10](https://gitlab.com/fedora/ostree/sig/-/issues/10)
-
-Documentation sources:
-
-- [Silverblue](https://github.com/fedora-silverblue/silverblue-docs)
-- [Kinoite](https://pagure.io/fedora-kde/kinoite-docs)
-- [Sway Atomic](https://gitlab.com/fedora/sigs/sway/sericea-docs)
-- Budgie Atomic (to be determined)
-- COSMIC Atomic (to be determined)
 
 ## Syncing with Fedora Comps
 
