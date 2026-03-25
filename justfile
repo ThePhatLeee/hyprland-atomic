@@ -437,7 +437,7 @@ upload-container variant=default_variant arch=default_arch:
     rm private.key.b64 private.key
 
 # Upload a container to an anonymous registry. Useful for local builds
-upload-container-simple variant=default_variant arch=default_arch:
+upload-container-local variant=default_variant arch=default_arch:
     #!/bin/bash
     set -euxo pipefail
 

@@ -117,7 +117,7 @@ podman run -d -p 5000:5000 --name local-registry registry:2
 
 # Push the ociarchive to the image registry
 REGISTRY=192.168.122.1:5000 RELEASE_REPO=fedora \
-  just upload-container-simple
+  just upload-container-local
 
 # Examine the output for the OCI image location, e.g.:
 # 192.168.122.2:5000/fedora/silverblue:rawhide.20260324.0
