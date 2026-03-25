@@ -198,7 +198,7 @@ Issues common to all Fedora Atomic Desktops are tracked in
 Desktop specific issues should be filed in their respective issue trackers:
 
 - [Silverblue](https://github.com/fedora-silverblue/issue-tracker/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
-    - See also the [Workstation issue tracker](https://pagure.io/fedora-workstation/issues?status=Open&order_key=last_updated&order=desc)
+    - See also the [Workstation issue tracker](https://forge.fedoraproject.org/workstation/tickets/issues?q=&type=all&sort=recentupdate&state=open)
 - [Kinoite](https://forge.fedoraproject.org/kde/tracker/issues)
   ([KDE SIG](https://fedoraproject.org/wiki/SIGs/KDE))
 - [Sway Atomic](https://gitlab.com/fedora/sigs/sway/SIG/-/issues)
