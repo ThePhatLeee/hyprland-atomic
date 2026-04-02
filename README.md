@@ -226,7 +226,7 @@ Use the branch recipe to create the new release branch and update the main
 branch:
 
 ```
-just branch <release>
+just branch
 ```
 
 Push the new changes in both branches.
