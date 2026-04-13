@@ -5,9 +5,6 @@
 # This is only used for local development. The builds made on the Fedora
 # infrastructure are run via Pungi in a Koji runroot.
 
-# Current default in Pungi
-force_nocache := "true"
-
 # Just doesn't have a native dict type, but quoted bash dictionary works fine
 pretty_names := '(
     [silverblue]="Silverblue"
@@ -205,10 +202,8 @@ compose-legacy variant="silverblue":
         "--repo=repo"
         "--cachedir=cache"
         "--unified-core"
+        "--force-nocache"
     )
-    if [[ {{force_nocache}} == "true" ]]; then
-        ARGS+=("--force-nocache")
-    fi
     CMD="rpm-ostree"
     if [[ ${EUID} -ne 0 ]]; then
         CMD="sudo rpm-ostree"
@@ -254,10 +249,8 @@ compose-image variant="silverblue":
         "--initialize"
         "--label=quay.expires-after=4w"
         "--max-layers=96"
+        "--force-nocache"
     )
-    if [[ {{force_nocache}} == "true" ]]; then
-        ARGS+=("--force-nocache")
-    fi
     # To debug with gdb, use: gdb --args ...
     CMD="rpm-ostree"
     if [[ ${EUID} -ne 0 ]]; then
