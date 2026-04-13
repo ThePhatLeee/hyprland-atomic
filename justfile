@@ -46,6 +46,11 @@ release_ver := '''
 "$(rpm-ostree compose tree --print-only "silverblue.yaml" | jq -r '."mutate-os-release"')"
 '''
 
+# Define a 'is_rawhide' shortcut for use in recipes
+is_rawhide := '''
+"$(rpm-ostree compose tree --print-only "silverblue.yaml" | jq -r '.repos[]')" == "fedora-rawhide"
+'''
+
 # Define a retry function for use in recipes
 retry_function := '
 retry() {
@@ -412,6 +417,13 @@ upload-container-local variant=default_variant arch=default_arch:
         "oci-archive:${variant}.ociarchive" \
         "docker://${image}:${version}.${buildid}${suffix}"
 
+    # Push under the rawhide name as needed
+    if [[ {{is_rawhide}} ]]; then
+        retry 5 60 skopeo copy "${SKOPEO_ARGS[@]}" \
+            "oci-archive:${variant}.ociarchive" \
+            "docker://${image}:rawhide.${buildid}${suffix}"
+    fi
+
 # Create a multi-arch manifest for a given variant, push it to a registry and sign it
 multi-arch-manifest variant=default_variant:
     #!/bin/bash
@@ -474,6 +486,13 @@ multi-arch-manifest variant=default_variant:
         "${image}:${version}.${buildid}" \
         "docker://${image}:${version}.${buildid}"
 
+    # Push under the rawhide name as needed
+    if [[ {{is_rawhide}} ]]; then
+        retry 5 60 buildah manifest push \
+            "${image}:${version}.${buildid}" \
+            "docker://${image}:rawhide.${buildid}"
+    fi
+
     # Sign manifest
     retry 5 60 cosign sign -y --key private.key ${image}:${version}.${buildid}
 
@@ -481,6 +500,13 @@ multi-arch-manifest variant=default_variant:
     retry 5 60 buildah manifest push \
         "${image}:${version}.${buildid}" \
         "docker://${image}:${version}"
+
+    # Push under the rawhide name as needed
+    if [[ {{is_rawhide}} ]]; then
+        retry 5 60 buildah manifest push \
+            "${image}:${version}.${buildid}" \
+            "docker://${image}:rawhide"
+    fi
 
     # Sign manifest
     retry 5 60 cosign sign -y --key private.key ${image}:${version}
