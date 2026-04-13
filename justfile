@@ -41,6 +41,11 @@ volume_id_substitutions := '(
     [cosmic-atomic]="CSMCA"
 )'
 
+# Define a 'release_ver' shortcut for use in recipes
+release_ver := '''
+"$(rpm-ostree compose tree --print-only "silverblue.yaml" | jq -r '."mutate-os-release"')"
+'''
+
 # Define a retry function for use in recipes
 retry_function := '
 retry() {
@@ -76,9 +81,7 @@ branch:
 
     git checkout main
 
-    default_variant={{default_variant}}
-    version="$(rpm-ostree compose tree --print-only --repo=repo ${default_variant}.yaml | jq -r '."mutate-os-release"')"
-
+    version={{release_ver}}
     # recipe will exit if branching the repo fails, such as if branch already exists
     git branch f${version}
     sed -i "s/${version}/$(( version + 1 ))/g" comps-sync.py README.md
@@ -104,8 +107,7 @@ sync:
         git clone https://pagure.io/fedora-comps.git
     fi
 
-    default_variant={{default_variant}}
-    version="$(rpm-ostree compose tree --print-only --repo=repo ${default_variant}.yaml | jq -r '."mutate-os-release"')"
+    version={{release_ver}}
     ./comps-sync.py --save fedora-comps/comps-f${version}.xml.in
 
 # Sync the manifests with the content of the comps groups
@@ -122,8 +124,7 @@ comps-sync:
         popd > /dev/null || exit 1
     fi
 
-    default_variant={{default_variant}}
-    version="$(rpm-ostree compose tree --print-only --repo=repo ${default_variant}.yaml | jq -r '."mutate-os-release"')"
+    version={{release_ver}}
     ./comps-sync.py --save fedora-comps/comps-f${version}.xml.in
 
 # Check if the manifests are in sync with the content of the comps groups
@@ -140,8 +141,7 @@ comps-sync-check:
         popd > /dev/null || exit 1
     fi
 
-    default_variant={{default_variant}}
-    version="$(rpm-ostree compose tree --print-only --repo=repo ${default_variant}.yaml | jq -r '."mutate-os-release"')"
+    version={{release_ver}}
     ./comps-sync.py fedora-comps/comps-f${version}.xml.in
 
 # Output the processed manifest for a given variant (defaults to Silverblue)
@@ -196,7 +196,7 @@ compose-legacy variant=default_variant:
     timestamp="$(date --iso-8601=sec)"
     echo "${buildid}" > .buildid
 
-    version="$(rpm-ostree compose tree --print-only --repo=repo ${variant}.yaml | jq -r '."mutate-os-release"')"
+    version={{release_ver}}
     echo "Composing ${variant_pretty} ${version}.${buildid} ..."
 
     ARGS=(
@@ -244,7 +244,7 @@ compose-image variant=default_variant:
     timestamp="$(date --iso-8601=sec)"
     echo "${buildid}" > .buildid
 
-    version="$(rpm-ostree compose tree --print-only ${variant}.yaml | jq -r '."mutate-os-release"')"
+    version={{release_ver}}
     echo "Composing ${variant_pretty} ${version}.${buildid} ..."
 
     ARGS=(
@@ -317,13 +317,6 @@ upload-container variant=default_variant arch=default_arch:
         exit 1
     fi
 
-    version=""
-    if [[ "$(git rev-parse --abbrev-ref HEAD)" == "main" ]] || [[ -f "fedora-rawhide.repo" ]]; then
-        version="rawhide"
-    else
-        version="$(rpm-ostree compose tree --print-only --repo=repo ${variant}.yaml | jq -r '."mutate-os-release"')"
-    fi
-
     # Login to the registry
     retry 5 60 skopeo login --username "${CI_REGISTRY_USER}" --password "${CI_REGISTRY_PASSWORD}" "${REGISTRY}"
 
@@ -345,6 +338,7 @@ upload-container variant=default_variant arch=default_arch:
         "--dest-compress-format" "zstd"
     )
 
+    version={{release_ver}}
 
     # Push fully versioned tag (major version, build date/id, arch)
     retry 5 60 skopeo copy "${SKOPEO_ARGS[@]}" \
@@ -391,13 +385,6 @@ upload-container-local variant=default_variant arch=default_arch:
         exit 1
     fi
 
-    version=""
-    if [[ "$(git rev-parse --abbrev-ref HEAD)" == "main" ]] || [[ -f "fedora-rawhide.repo" ]]; then
-        version="rawhide"
-    else
-        version="$(rpm-ostree compose tree --print-only --repo=repo ${variant}.yaml | jq -r '."mutate-os-release"')"
-    fi
-
     if [[ -n ${CI_REGISTRY_USER+x} ]] || [[ -n ${CI_REGISTRY_PASSWORD+x} ]]; then
         # Login to the registry
         retry 5 60 skopeo login --username "${CI_REGISTRY_USER}" --password "${CI_REGISTRY_PASSWORD}" "${REGISTRY}"
@@ -418,6 +405,7 @@ upload-container-local variant=default_variant arch=default_arch:
         "--dest-compress-format" "zstd"
     )
 
+    version={{release_ver}}
 
     # Push fully versioned tag (major version, build date/id, arch)
     retry 5 60 skopeo copy "${SKOPEO_ARGS[@]}" \
@@ -461,13 +449,6 @@ multi-arch-manifest variant=default_variant:
         exit 1
     fi
 
-    version=""
-    if [[ "$(git rev-parse --abbrev-ref HEAD)" == "main" ]] || [[ -f "fedora-rawhide.repo" ]]; then
-        version="rawhide"
-    else
-        version="$(rpm-ostree compose tree --print-only --repo=repo ${variant}.yaml | jq -r '."mutate-os-release"')"
-    fi
-
     # Login to the registry
     retry 5 60 skopeo login --username "${CI_REGISTRY_USER}" --password "${CI_REGISTRY_PASSWORD}" "${REGISTRY}"
 
@@ -476,6 +457,8 @@ multi-arch-manifest variant=default_variant:
         --authfile="${HOME}/.docker/config.json" "${REGISTRY}"
 
     image="${REGISTRY}/${RELEASE_REPO}/${variant}"
+
+    version={{release_ver}}
 
     # Create manifest with full version tags
     buildah manifest create "${image}:${version}.${buildid}" \
