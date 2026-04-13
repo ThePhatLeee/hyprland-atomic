@@ -339,17 +339,12 @@ upload-container variant=default_variant arch=default_arch:
         suffix="-${arch}"
     fi
 
+    # Support for the zstd:chunked format is not ready yet
     SKOPEO_ARGS=(
         "--retry-times" "3"
+        "--dest-compress-format" "zstd"
     )
 
-    # Support for the zstd:chunked format is not ready yet
-    SKOPEO_ARGS+=("--dest-compress-format")
-    if [[ ${version} == "rawhide" ]] || [[ ${version} == "43" ]]; then
-        SKOPEO_ARGS+=("zstd")
-    else
-        SKOPEO_ARGS+=("gzip")
-    fi
 
     # Push fully versioned tag (major version, build date/id, arch)
     retry 5 60 skopeo copy "${SKOPEO_ARGS[@]}" \
@@ -416,18 +411,13 @@ upload-container-local variant=default_variant arch=default_arch:
         suffix="-${arch}"
     fi
 
+    # Support for the zstd:chunked format is not ready yet
     SKOPEO_ARGS=(
         "--retry-times" "3"
         "--dest-tls-verify=false"
+        "--dest-compress-format" "zstd"
     )
 
-    # Support for the zstd:chunked format is not ready yet
-    SKOPEO_ARGS+=("--dest-compress-format")
-    if [[ ${version} == "rawhide" ]] || [[ ${version} == "43" ]]; then
-        SKOPEO_ARGS+=("zstd")
-    else
-        SKOPEO_ARGS+=("gzip")
-    fi
 
     # Push fully versioned tag (major version, build date/id, arch)
     retry 5 60 skopeo copy "${SKOPEO_ARGS[@]}" \
