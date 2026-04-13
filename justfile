@@ -5,8 +5,6 @@
 # This is only used for local development. The builds made on the Fedora
 # infrastructure are run via Pungi in a Koji runroot.
 
-# Set a default for some recipes
-default_variant := "silverblue"
 default_arch := "default"
 # Current default in Pungi
 force_nocache := "true"
@@ -150,14 +148,14 @@ comps-sync-check:
     ./comps-sync.py fedora-comps/comps-f${version}.xml.in
 
 # Output the processed manifest for a given variant (defaults to Silverblue)
-manifest variant=default_variant:
+manifest variant="silverblue":
     #!/bin/bash
     set -euo pipefail
 
     rpm-ostree compose tree --print-only --repo=repo {{variant}}.yaml
 
 # Perform dependency resolution for a given variant (defaults to Silverblue)
-compose-dry-run variant=default_variant:
+compose-dry-run variant="silverblue":
     #!/bin/bash
     set -euxo pipefail
 
@@ -171,10 +169,10 @@ compose-dry-run variant=default_variant:
     rpm-ostree compose tree --unified-core --repo=repo --dry-run {{variant}}.yaml
 
 # Alias/shortcut for compose-image command
-compose variant=default_variant: (compose-image variant)
+compose variant="silverblue": (compose-image variant)
 
 # Compose a variant using the legacy non container path (defaults to Silverblue)
-compose-legacy variant=default_variant:
+compose-legacy variant="silverblue":
     #!/bin/bash
     set -euxo pipefail
 
@@ -229,7 +227,7 @@ compose-legacy variant=default_variant:
     ostree summary --repo=repo --update
 
 # Compose an Ostree Native Container OCI image
-compose-image variant=default_variant:
+compose-image variant="silverblue":
     #!/bin/bash
     set -euxo pipefail
 
@@ -285,7 +283,7 @@ clean-cache:
     rm -rf ./cache
 
 # Upload a container to a registry and sign it. Used in CI
-upload-container variant=default_variant arch=default_arch:
+upload-container variant="silverblue" arch=default_arch:
     #!/bin/bash
     set -euxo pipefail
 
@@ -361,7 +359,7 @@ upload-container variant=default_variant arch=default_arch:
     rm private.key.b64 private.key
 
 # Upload a container to an anonymous registry. Useful for local builds
-upload-container-local variant=default_variant arch=default_arch:
+upload-container-local variant="silverblue" arch=default_arch:
     #!/bin/bash
     set -euxo pipefail
 
@@ -425,7 +423,7 @@ upload-container-local variant=default_variant arch=default_arch:
     fi
 
 # Create a multi-arch manifest for a given variant, push it to a registry and sign it
-multi-arch-manifest variant=default_variant:
+multi-arch-manifest variant="silverblue":
     #!/bin/bash
     set -euxo pipefail
 
