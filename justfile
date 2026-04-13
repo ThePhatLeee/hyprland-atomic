@@ -5,7 +5,6 @@
 # This is only used for local development. The builds made on the Fedora
 # infrastructure are run via Pungi in a Koji runroot.
 
-default_arch := "default"
 # Current default in Pungi
 force_nocache := "true"
 
@@ -283,7 +282,7 @@ clean-cache:
     rm -rf ./cache
 
 # Upload a container to a registry and sign it. Used in CI
-upload-container variant="silverblue" arch=default_arch:
+upload-container variant="silverblue" arch="default":
     #!/bin/bash
     set -euxo pipefail
 
@@ -359,7 +358,7 @@ upload-container variant="silverblue" arch=default_arch:
     rm private.key.b64 private.key
 
 # Upload a container to an anonymous registry. Useful for local builds
-upload-container-local variant="silverblue" arch=default_arch:
+upload-container-local variant="silverblue" arch="default":
     #!/bin/bash
     set -euxo pipefail
 
