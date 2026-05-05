@@ -60,10 +60,6 @@ exclude_list:
     # We removed cronie a while ago, should nuke these too
     - crontabs
     - at
-    # See: https://gitlab.com/fedora/ostree/sig/-/issues/30
-    - abrt-cli
-    - abrt-desktop
-    - abrt-java-connector
     # Requires libreoffice
     - unoconv
     # Will change to git-core as git pulls in Perl
