@@ -176,7 +176,7 @@ exclude-packages:
   # See: https://fedoraproject.org/wiki/Changes/AtomicDesktopDropFuse2
   # See: https://gitlab.com/fedora/ostree/sig/-/issues/50
   - fuse
-  - fuselibs
+  - fuse-libs
 
 postprocess:
   - |
