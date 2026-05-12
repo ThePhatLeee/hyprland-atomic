@@ -32,8 +32,6 @@ packages:
   # === CORE WAYLAND & PORTALS (Official/Copr) ===
   - xdg-desktop-portal-hyprland
   - xdg-desktop-portal-gtk
-  - qt5-wayland
-  - qt6-wayland
   - hyprpaper
   - hyprlock
   - hypridle
@@ -42,11 +40,9 @@ packages:
   # === TERMINAL & DEV TOOLS (Official Fedora) ===
   - kitty                
   - zsh
-  - tmux
-  - starship             
+  - tmux          
   - zoxide               
-  - btop                 
-  - lazygit              
+  - btop                               
   - git
   - gh                   
   - eza                  
