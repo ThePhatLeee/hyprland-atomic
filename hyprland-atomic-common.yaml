@@ -49,10 +49,6 @@ packages:
   - sushi
   - file-roller
 
-  # --- Theming Configuration Enablers ---
-  - qt5ct
-  - qt6ct
-
   # --- Terminal & Developer Core ---
   - kitty
   - zsh
