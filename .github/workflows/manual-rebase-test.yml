@@ -1,31 +1,23 @@
 # SPDX-FileCopyrightText: The Fedora Atomic Desktop Contributors
 # SPDX-License-Identifier: CC0-1.0
 
-name: "Manual rebase/test artifact build"
+name: Build and Publish Hyprland Atomic
 
 on:
-  workflow_dispatch:
-    inputs:
-      variant:
-        description: "Variant to build and test"
-        required: true
-        default: "hyprland-atomic"
-        type: choice
-        options:
-          - base-atomic
-          - silverblue
-          - kinoite
-          - kinoite-mobile
-          - sway-atomic
-          - budgie-atomic
-          - cosmic-atomic
-          - hyprland-atomic
+  workflow_dispatch: # Keep manual triggers available
+  schedule:
+    - cron: "0 6 * * 1" # Weekly on Mondays at 06:00 UTC
+
+env:
+  IMAGE_NAME: "hyprland-atomic"
+  IMAGE_TAG: "latest"
 
 permissions:
   contents: read
+  packages: write # Required to push to GitHub Container Registry
 
 jobs:
-  build-test-artifact:
+  build-push-artifact:
     runs-on: ubuntu-24.04
     container:
       image: quay.io/fedora-ostree-desktops/buildroot:rawhide
@@ -37,112 +29,50 @@ jobs:
       - name: "Runner setup"
         uses: ./.github/actions/setup
 
-      - name: "Compose dry-run test"
-        shell: bash
-        env:
-          VARIANT: ${{ inputs.variant }}
-        run: |
-          set -euxo pipefail
-          just compose-dry-run "${VARIANT}"
-
       - name: "Build OCI archive artifact"
         shell: bash
-        env:
-          VARIANT: ${{ inputs.variant }}
         run: |
           set -euxo pipefail
           mkdir -p cache
           rpm-ostree compose image \
             --cachedir=cache \
             --initialize \
-            --label=quay.expires-after=4w \
             --max-layers=96 \
             --force-nocache \
-            "${VARIANT}.yaml" \
-            "${VARIANT}.ociarchive"
-          sha256sum "${VARIANT}.ociarchive" > "${VARIANT}.ociarchive.sha256"
-          {
-            echo "Download the workflow artifacts and run these commands on your test system:"
-            echo
-            echo "podman load -i ${{ inputs.variant }}.ociarchive"
-            echo "podman images"
-            echo
-            echo "Tag the loaded image to something stable (replace <LOADED_IMAGE>):"
-            echo "podman tag <LOADED_IMAGE> localhost/${{ inputs.variant }}:manual"
-            echo
-            echo "Optional integrity check (download '${{ inputs.variant }}-manual-signature-${{ github.run_id }}' artifact first):"
-            echo "cosign verify-blob --key cosign.pub --signature ${{ inputs.variant }}.ociarchive.sig ${{ inputs.variant }}.ociarchive"
-            echo
-            echo "Rebase to the local image:"
-            echo "sudo rpm-ostree rebase ostree-unverified-image:containers-storage:localhost/${{ inputs.variant }}:manual"
-            echo
-            echo "Reboot and test:"
-            echo "systemctl reboot"
-          } > "REBASE_FROM_ARTIFACT.txt"
+            "${IMAGE_NAME}.yaml" \
+            "${IMAGE_NAME}.ociarchive"
 
-      - name: "Check if signing key is configured"
-        id: signing-check
+      - name: "Compress Artifact"
         shell: bash
-        env:
-          SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
         run: |
-          set -euo pipefail
-          if [[ -n "${SIGNING_SECRET}" ]]; then
-            echo "enabled=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "enabled=false" >> "$GITHUB_OUTPUT"
-          fi
+          tar -czvf ${IMAGE_NAME}.tar.gz ${IMAGE_NAME}.ociarchive
 
-      - name: "Sign OCI archive with cosign key"
-        if: ${{ steps.signing-check.outputs.enabled == 'true' }}
+      - name: "Upload Compressed Artifact"
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.IMAGE_NAME }}-build-${{ github.run_id }}
+          path: ${{ env.IMAGE_NAME }}.tar.gz
+          retention-days: 14
+          compression-level: 0 # Already compressed via tar.gz
+
+      - name: "Push to GitHub Container Registry"
         shell: bash
-        env:
-          VARIANT: ${{ inputs.variant }}
-          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
         run: |
           set -euxo pipefail
-          cosign sign-blob --yes \
-            --key env://COSIGN_PRIVATE_KEY \
-            --output-signature "${VARIANT}.ociarchive.sig" \
-            "${VARIANT}.ociarchive"
-          cosign public-key --key env://COSIGN_PRIVATE_KEY > "cosign.pub"
+          
+          # GHCR requires repository names to be strictly lowercase
+          OWNER_LOWER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          TARGET_IMAGE="ghcr.io/${OWNER_LOWER}/${IMAGE_NAME}:${IMAGE_TAG}"
 
-      - name: "Upload build artifacts"
-        id: upload
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ inputs.variant }}-manual-${{ github.run_id }}
-          path: |
-            ${{ inputs.variant }}.ociarchive
-            ${{ inputs.variant }}.ociarchive.sha256
-            REBASE_FROM_ARTIFACT.txt
-          retention-days: 28
-          compression-level: 0
-
-      - name: "Upload cosign artifacts"
-        if: ${{ steps.signing-check.outputs.enabled == 'true' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ inputs.variant }}-manual-signature-${{ github.run_id }}
-          path: |
-            ${{ inputs.variant }}.ociarchive.sig
-            cosign.pub
-          retention-days: 28
-          compression-level: 0
-
-      - name: "Publish artifact and rebase links"
-        shell: bash
-        env:
-          VARIANT: ${{ inputs.variant }}
-        run: |
-          set -euo pipefail
-          {
-            echo "## Manual rebase/test artifacts"
-            echo
-            echo "- Workflow run: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-            echo "- Artifact: ${{ steps.upload.outputs.artifact-url }}"
-            echo "- Files: ${VARIANT}.ociarchive, ${VARIANT}.ociarchive.sha256, REBASE_FROM_ARTIFACT.txt"
-            echo "- Optional signature artifact: '${VARIANT}-manual-signature-${GITHUB_RUN_ID}' (contains ${VARIANT}.ociarchive.sig, cosign.pub)"
-            echo
-            echo "Share the workflow run/artifact link above with testers."
-          } >> "$GITHUB_STEP_SUMMARY"
+          # Authenticate with GHCR using the built-in Actions token
+          skopeo login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+          
+          # Copy the local OCI archive directly to the registry
+          skopeo copy oci-archive:${IMAGE_NAME}.ociarchive docker://${TARGET_IMAGE}
+          
+          # Generate simple rebase instructions in the GitHub Actions UI
+          echo "## Build and Push Successful! 🚀" >> $GITHUB_STEP_SUMMARY
+          echo "Run this command on your machine to rebase to the latest build:" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "sudo rpm-ostree rebase ostree-unverified-registry:${TARGET_IMAGE}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
