@@ -14,7 +14,8 @@ packages:
   - noctalia-shell-v5
   - noctalia-qs
   - quickshell
-  - uwsm                 
+  - uwsm
+  - hyprland
   - hyprlauncher
   - hyprsunset           
   - hyprshutdown         
@@ -57,7 +58,8 @@ packages:
 
   # === WORKFLOW & CLIPBOARD (Official) ===
   - wl-clipboard
-  - cliphist             
+  - cliphist
+  - hyprshot
   - grim
   - slurp
   - wdisplays            
