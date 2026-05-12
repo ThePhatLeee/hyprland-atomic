@@ -9,8 +9,19 @@ include:
   - packages/hyprland-atomic.yaml
 
 packages:
+  # --- Core Compositor & Official Ecosystem ---
+  - hyprland
+  - hyprpaper
+  - hyprlock
+  - hypridle
+  - hyprpicker
+  - hyprcursor
+
   # --- Portals & Translation Layers ---
+  - xdg-desktop-portal-hyprland
   - xdg-desktop-portal-gtk
+  - qt5-wayland
+  - qt6-wayland
 
   # --- UI Shell, Workflow & Launchers ---
   - waybar
@@ -29,6 +40,7 @@ packages:
   - kanshi
 
   # --- Security, Keyring & Auth ---
+  - polkit-gnome
   - gnome-keyring
   - seahorse
 
@@ -48,6 +60,11 @@ packages:
   - gvfs-smb
   - sushi
   - file-roller
+
+  # --- Theming Configuration Enablers ---
+  - nwg-look
+  - qt5ct
+  - qt6ct
 
   # --- Terminal & Developer Core ---
   - kitty

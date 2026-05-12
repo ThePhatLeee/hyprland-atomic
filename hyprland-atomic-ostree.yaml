@@ -6,6 +6,7 @@ include:
 
 # Kept in the leaf manifest as they are overwritten by Pungi in composes
 repos:
+  - lionheart-hyprland-rawhide
   - fedora-rawhide
   # - fedora
   # - updates
