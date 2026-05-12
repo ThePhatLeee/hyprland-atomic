@@ -9,9 +9,6 @@ include:
   - packages/hyprland-atomic.yaml
 
 packages:
-  # --- Core Compositor & Official Ecosystem ---
-  - hyprcursor
-
   # --- Portals & Translation Layers ---
   - xdg-desktop-portal-gtk
 
