@@ -13,7 +13,6 @@ packages:
   - noctalia-hyprland-meta
   - noctalia-shell-v5
   - noctalia-qs
-  - quickshell
   - uwsm
   - hyprland
   - hyprlauncher
@@ -43,7 +42,6 @@ packages:
   - tmux          
   - zoxide               
   - btop                               
-  - git
   - gh                   
   - eza                  
   - bat                  
