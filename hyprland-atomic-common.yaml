@@ -25,17 +25,17 @@ packages:
 
   # --- UI Shell, Workflow & Launchers ---
   - waybar
-  - rofi-wayland  
-  - fuzzel        
+  - rofi-wayland
+  - fuzzel
   - swaync
-  - wlogout       
+  - wlogout
   - wl-clipboard
   - cliphist
   - grim
   - slurp
 
   # --- Display & Monitor Utilities ---
-  - wlsunset     
+  - wlsunset
   - wdisplays
   - kanshi
 
@@ -56,13 +56,13 @@ packages:
   - nautilus
   - nautilus-python
   - gvfs
-  - gvfs-mtp      
-  - gvfs-smb      
-  - sushi         
-  - file-roller   
+  - gvfs-mtp
+  - gvfs-smb
+  - sushi
+  - file-roller
 
   # --- Theming Configuration Enablers ---
-  - nwg-look      
+  - nwg-look
   - qt5ct
   - qt6ct
 
@@ -71,11 +71,10 @@ packages:
   - zsh
   - tmux
   - neovim
-  - eza           
-  - bat          
+  - eza
+  - bat
   - fzf
   - ripgrep
 
 # Can only be excluded on variants that do not include GNOME Software
 exclude-packages:
- 
