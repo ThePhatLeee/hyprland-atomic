@@ -15,12 +15,12 @@
     - name: Install dependencies
       package:
         name:
-          - 'jq'
-          - 'just'
-          - 'ostree'
-          - 'python3-pyyaml'
-          - 'rpm-ostree'
-          - 'selinux-policy-targeted'
+          - "jq"
+          - "just"
+          - "ostree"
+          - "python3-pyyaml"
+          - "rpm-ostree"
+          - "selinux-policy-targeted"
         state: present
       become: true
 
@@ -106,6 +106,20 @@
       # Still run the next step if this one fails
       ignore_errors: true
 
+    - name: Perform dependency resolution for Hyprland Atomic
+      ansible.builtin.shell:
+        chdir: "{{ zuul.project.src_dir }}"
+        cmd: "just compose-dry-run hyprland-atomic && touch .zuulci.hyprland-atomic"
+      # Still run the next step if this one fails
+      ignore_errors: true
+
+    - name: Perform dependency resolution for Hyprland Atomic (ostree classic)
+      ansible.builtin.shell:
+        chdir: "{{ zuul.project.src_dir }}"
+        cmd: "just compose-dry-run hyprland-atomic-ostree && touch .zuulci.hyprland-atomic-ostree"
+      # Still run the next step if this one fails
+      ignore_errors: true
+
     - name: Compose the base variant
       ansible.builtin.command:
         chdir: "{{ zuul.project.src_dir }}"
@@ -114,4 +128,4 @@
     - name: Check if any previous dependency resolution steps failed
       ansible.builtin.shell:
         chdir: "{{ zuul.project.src_dir }}"
-        cmd: "[[ -f .zuulci.comps ]] &&  [[ -f .zuulci.silverblue ]] &&  [[ -f .zuulci.silverblue-ostree ]] && [[ -f .zuulci.kinoite ]] && [[ -f .zuulci.kinoite-ostree ]] && [[ -f .zuulci.sway-atomic ]] && [[ -f .zuulci.sway-atomic-ostree ]] && [[ -f .zuulci.budgie-atomic ]]  && [[ -f .zuulci.budgie-atomic-ostree ]] && [[ -f .zuulci.cosmic-atomic ]]  && [[ -f .zuulci.cosmic-atomic-ostree ]]"
+        cmd: "[[ -f .zuulci.comps ]] &&  [[ -f .zuulci.silverblue ]] &&  [[ -f .zuulci.silverblue-ostree ]] && [[ -f .zuulci.kinoite ]] && [[ -f .zuulci.kinoite-ostree ]] && [[ -f .zuulci.sway-atomic ]] && [[ -f .zuulci.sway-atomic-ostree ]] && [[ -f .zuulci.budgie-atomic ]]  && [[ -f .zuulci.budgie-atomic-ostree ]] && [[ -f .zuulci.cosmic-atomic ]]  && [[ -f .zuulci.cosmic-atomic-ostree ]] && [[ -f .zuulci.hyprland-atomic ]]  && [[ -f .zuulci.hyprland-atomic-ostree ]]"

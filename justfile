@@ -18,6 +18,7 @@ pretty_names := '(
     [lxqt-atomic]="LXQt Atomic"
     [base-atomic]="Base Atomic"
     [cosmic-atomic]="COSMIC Atomic"
+    [hyprland-atomic]="Hyprland Atomic"
 )'
 
 # subset of the map from https://pagure.io/pungi-fedora/blob/main/f/general.conf
@@ -33,6 +34,7 @@ volume_id_substitutions := '(
     [lxqt-atomic]="LxA"
     [base-atomic]="BsA"
     [cosmic-atomic]="CSMCA"
+    [hyprland-atomic]="hypra"
 )'
 
 # Define a 'release_ver' shortcut for use in recipes

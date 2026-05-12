@@ -14,6 +14,8 @@ variants=(
     'budgie-atomic'
     'base-atomic'
     'cosmic-atomic'
+    'hyprland-atomic'
+
 )
 
 branch="$(git rev-parse --abbrev-ref HEAD)"

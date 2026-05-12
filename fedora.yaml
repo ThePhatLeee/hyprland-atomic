@@ -50,6 +50,10 @@ conditional-include:
     include:
       packages:
         - fedora-release-cosmic-atomic
+  - if: variant == "hyprland-atomic"
+    include:
+      packages:
+        - fedora-release-hyprland-atomic
   - if: variant == "base-atomic"
     include:
       packages:

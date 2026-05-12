@@ -1,0 +1,8 @@
+include:
+  - hyprland-atomic-common.yaml
+
+# Kept in the leaf manifest as they are overwritten by Pungi in composes
+repos:
+  - fedora-rawhide
+  # - fedora
+  # - updates

@@ -202,6 +202,7 @@ def main():
         "kinoite-mobile": ["kde-mobile", "kde-mobile-apps", "base-graphical"],
         "silverblue": ["gnome-desktop", "base-graphical"],
         "sway-atomic": ["swaywm", "swaywm-extended", "base-graphical"],
+        "hyprland-atomic": [...]
     }
 
     # Generate treefiles for all variants

@@ -1,0 +1,17 @@
+metadata:
+  summary: "Fedora Hyprland atomic"
+
+variables:
+  variant: "hyprland-atomic"
+
+include:
+  - common.yaml
+  - packages/hyprland-atomic.yaml
+
+packages:
+  # Portals for Flatpak
+  - xdg-desktop-portal-gtk
+
+# Can only be excluded on variants that do not include GNOME Software
+exclude-packages:
+  - PackageKit-glib
