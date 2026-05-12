@@ -1,4 +1,4 @@
-[lionheartp-hyprland-rawhide]
+[lionheartp-Hyprland-rawhide]
 name=COPR repo for Hyprland owned by lionheartp
 baseurl=https://download.copr.fedorainfracloud.org/results/lionheartp/Hyprland/fedora-rawhide-$basearch/
 type=rpm-md
