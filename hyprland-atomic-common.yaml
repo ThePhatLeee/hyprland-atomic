@@ -9,72 +9,79 @@ include:
   - packages/hyprland-atomic.yaml
 
 packages:
-  # --- Core Compositor & Official Ecosystem ---
-  - hyprland
-  - hyprpaper
-  - hyprlock
-  - hypridle
-  - hyprpicker
+  # === NOCTALIA SHELL & HYPRLAND NATIVE (From Copr) ===
+  - noctalia-hyprland-meta
+  - noctalia-shell-v5
+  - noctalia-qs
+  - quickshell
+  - uwsm                 
+  - hyprlauncher
+  - hyprsunset           
+  - hyprshutdown         
+  - hyprpolkitagent      
+  - hyprpwcenter         
+  - hyprsysteminfo
+  - hyprwire             
+  - hyprland-qt-support
+  - hyprqt6engine
   - hyprcursor
+  - hyprland-contrib
+  - gpu-screen-recorder  
 
-  # --- Portals & Translation Layers ---
+  # === CORE WAYLAND & PORTALS (Official/Copr) ===
   - xdg-desktop-portal-hyprland
   - xdg-desktop-portal-gtk
   - qt5-wayland
   - qt6-wayland
+  - hyprpaper
+  - hyprlock
+  - hypridle
+  - hyprpicker
 
-  # --- UI Shell, Workflow & Launchers ---
-  - waybar
-  - rofi-wayland
-  - fuzzel
-  - swaync
-  - wlogout
+  # === TERMINAL & DEV TOOLS (Official Fedora) ===
+  - kitty                
+  - zsh
+  - tmux
+  - starship             
+  - zoxide               
+  - btop                 
+  - lazygit              
+  - git
+  - gh                   
+  - eza                  
+  - bat                  
+  - fzf                  
+  - ripgrep              
+  - fd-find              
+  - fastfetch            
+
+  # === WORKFLOW & CLIPBOARD (Official) ===
   - wl-clipboard
-  - cliphist
+  - cliphist             
   - grim
   - slurp
+  - wdisplays            
+  - kanshi               
 
-  # --- Display & Monitor Utilities ---
-  - wlsunset
-  - wdisplays
-  - kanshi
+  # === NAUTILUS SUITE (Official) ===
+  - nautilus
+  - gvfs-mtp              
+  - gvfs-smb              
+  - sushi                 
+  - file-roller           
 
-  # --- Security, Keyring & Auth ---
-  - polkit-gnome
-  - gnome-keyring
-  - seahorse
-
-  # --- Hardware & System Tray Applets ---
+  # === SECURITY & HARDWARE GLUE (Official) ===
+  - gnome-keyring         
+  - seahorse              
   - network-manager-applet
   - blueman
-  - pavucontrol
-  - udiskie
+  - udiskie               
   - brightnessctl
   - playerctl
-
-  # --- Nautilus Full Integration Suite ---
-  - nautilus
-  - nautilus-python
-  - gvfs
-  - gvfs-mtp
-  - gvfs-smb
-  - sushi
-  - file-roller
-
-  # --- Theming Configuration Enablers ---
-  - nwg-look
+  - pavucontrol
+  - nwg-look              
   - qt5ct
   - qt6ct
 
-  # --- Terminal & Developer Core ---
-  - kitty
-  - zsh
-  - tmux
-  - neovim
-  - eza
-  - bat
-  - fzf
-  - ripgrep
-
-# Can only be excluded on variants that do not include GNOME Software
+# Exclude packages to keep the image clean
 exclude-packages:
