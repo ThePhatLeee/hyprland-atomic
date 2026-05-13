@@ -82,3 +82,17 @@ packages:
 
 # Exclude packages to keep the image clean
 exclude-packages:
+
+postprocess:
+  - |
+    #!/usr/bin/env bash
+    set -xeuo pipefail
+    install -d -m 0755 /etc/sddm.conf.d /usr/lib/tmpfiles.d
+    cat > /etc/sddm.conf.d/theme.conf << 'EOF'
+    [Theme]
+    Current=noctalia-theme
+    ThemeDir=/var/lib/sddm/themes
+    EOF
+    cat > /usr/lib/tmpfiles.d/sddm-themes.conf << 'EOF'
+    d /var/lib/sddm/themes 0755 sddm sddm - -
+    EOF
