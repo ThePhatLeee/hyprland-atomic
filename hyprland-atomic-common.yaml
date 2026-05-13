@@ -29,6 +29,7 @@ packages:
   - gpu-screen-recorder  
 
   # === CORE WAYLAND & PORTALS (Official/Copr) ===
+  - sddm
   - xdg-desktop-portal-hyprland
   - xdg-desktop-portal-gtk
   - hyprpaper
