@@ -83,6 +83,9 @@ packages:
 # Exclude packages to keep the image clean
 exclude-packages:
 
+add-files:
+  - ["config/hypr/hyprland.lua", "/etc/skel/.config/hypr/hyprland.lua"]
+
 postprocess:
   - |
     #!/usr/bin/env bash
