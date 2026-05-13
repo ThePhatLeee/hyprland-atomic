@@ -62,6 +62,7 @@ packages:
 
   # === NAUTILUS SUITE (Official) ===
   - nautilus
+  - gnome-software
   - gvfs-mtp              
   - gvfs-smb              
   - sushi                 
