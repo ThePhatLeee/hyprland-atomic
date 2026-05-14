@@ -91,6 +91,7 @@ add-files:
   - ["config/hypr/hyprland.lua", "/etc/skel/.config/hypr/hyprland.lua"]
   - ["config/sddm/theme.conf", "/etc/sddm.conf.d/theme.conf"]
   - ["config/tmpfiles.d/sddm-themes.conf", "/etc/tmpfiles.d/sddm-themes.conf"]
+  - ["config/tmpfiles.d/hyprland-atomic-user-configs.conf", "/usr/lib/user-tmpfiles.d/hyprland-atomic-user-configs.conf"]
 
 postprocess:
   - |
