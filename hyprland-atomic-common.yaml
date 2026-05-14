@@ -40,6 +40,7 @@ packages:
   # === TERMINAL & DEV TOOLS (Official Fedora) ===
   - kitty                
   - zsh
+  - starship
   - tmux          
   - zoxide               
   - btop                               
@@ -85,6 +86,14 @@ packages:
 exclude-packages:
 
 add-files:
+  - ["config/zsh/zshrc", "/etc/skel/.zshrc"]
   - ["config/hypr/hyprland.lua", "/etc/skel/.config/hypr/hyprland.lua"]
   - ["config/sddm/theme.conf", "/etc/sddm.conf.d/theme.conf"]
   - ["config/tmpfiles.d/sddm-themes.conf", "/etc/tmpfiles.d/sddm-themes.conf"]
+
+postprocess:
+  - |
+    #!/usr/bin/env bash
+    set -xeuo pipefail
+
+    sed -i 's#^SHELL=.*#SHELL=/bin/zsh#' /etc/default/useradd
