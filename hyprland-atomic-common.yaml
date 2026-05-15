@@ -14,7 +14,6 @@ packages:
   - noctalia-hyprland-meta
   - noctalia-shell-v5
   - noctalia-qs
-  - quickshell
   - matugen
 
   # === HYPRLAND CORE ===
