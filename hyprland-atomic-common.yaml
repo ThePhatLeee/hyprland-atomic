@@ -1,5 +1,5 @@
 metadata:
-  summary: "Fedora Hyprland atomic"
+  summary: "Fedora Hyprland Atomic"
 
 variables:
   variant: "hyprland-atomic"
@@ -9,81 +9,97 @@ include:
   - packages/hyprland-atomic.yaml
 
 packages:
-  # === NOCTALIA SHELL & HYPRLAND NATIVE (From Copr) ===
+
+  # === NOCTALIA SHELL ===
   - noctalia-hyprland-meta
   - noctalia-shell-v5
   - noctalia-qs
-  - uwsm
+  - quickshell
+  - matugen
+
+  # === HYPRLAND CORE ===
   - hyprland
-  - hyprlauncher
-  - hyprsunset           
-  - hyprshutdown         
-  - hyprpolkitagent      
-  - hyprpwcenter         
-  - hyprsysteminfo
-  - hyprwire             
+  - uwsm
+  - aquamarine
   - hyprland-qt-support
   - hyprqt6engine
   - hyprcursor
   - hyprland-contrib
-  - gpu-screen-recorder  
+  - hyprland-guiutils
+  - hyprtoolkit
 
-  # === CORE WAYLAND & PORTALS (Official/Copr) ===
+  # === HYPRLAND UTILITIES ===
+  - hyprlauncher
+  - hyprsunset
+  - hyprshutdown
+  - hyprpolkitagent
+  - hyprpwcenter
+  - hyprsysteminfo
+  - hyprwire
+  - hyprpaper
+  - hyprpicker
+  - hyprshot
+  - gpu-screen-recorder
+
+  # === WAYLAND & SESSION ===
   - sddm
   - xdg-desktop-portal-hyprland
   - xdg-desktop-portal-gtk
-  - hyprpaper
-  - hyprlock
-  - hypridle
-  - hyprpicker
+  - uwsm
 
-  # === TERMINAL & DEV TOOLS (Official Fedora) ===
-  - kitty                
-  - zsh
-  - starship
-  - tmux          
-  - zoxide               
-  - btop                               
-  - gh                   
-  - eza                  
-  - bat                  
-  - fzf                  
-  - ripgrep              
-  - fd-find              
-  - fastfetch            
-
-  # === WORKFLOW & CLIPBOARD (Official) ===
-  - wl-clipboard
-  - cliphist
-  - hyprshot
+  # === DISPLAY & SCREENSHOT ===
   - grim
   - slurp
-  - wdisplays            
-  - kanshi               
+  - kanshi
 
-  # === NAUTILUS SUITE (Official) ===
+  # === CLIPBOARD ===
+  - wl-clipboard
+  - cliphist
+
+  # === NOTIFICATIONS ===
+  - dunst
+
+  # === FILE MANAGEMENT ===
   - nautilus
   - gnome-software
-  - gvfs-mtp              
-  - gvfs-smb              
-  - sushi                 
-  - file-roller           
+  - gvfs-mtp
+  - gvfs-smb
+  - sushi
+  - file-roller
 
-  # === SECURITY & HARDWARE GLUE (Official) ===
-  - gnome-keyring         
-  - seahorse              
-  - network-manager-applet
-  - blueman
-  - udiskie               
+  # === TERMINAL & SHELL ===
+  - kitty
+  - zsh
+  - starship
+  - tmux
+  - fastfetch
+
+  # === CLI TOOLS ===
+  - zoxide
+  - btop
+  - eza
+  - bat
+  - fzf
+  - ripgrep
+  - fd-find
+  - yazi
+  - gh
+
+  # === HARDWARE & SYSTEM ===
   - brightnessctl
   - playerctl
-  - pavucontrol
-  - nwg-look              
+  - udiskie
+
+  # === THEMING & QT ===
+  - nwg-look
   - qt5ct
   - qt6ct
 
-# Exclude packages to keep the image clean
+  # === SECURITY & SECRETS ===
+  - gnome-keyring
+
 exclude-packages:
+  - PackageKit-glib
 
 add-files:
   - ["config/zsh/zshrc", "/etc/skel/.zshrc"]
@@ -98,4 +114,10 @@ postprocess:
     #!/usr/bin/env bash
     set -xeuo pipefail
 
+    # Set zsh as default shell for new users
     sed -i 's#^SHELL=.*#SHELL=/bin/zsh#' /etc/default/useradd
+
+    # Prevent gnome-keyring from registering as polkit agent
+    # Keeps secrets service running for VSCode and other apps
+    sed -i 's/OnlyShowIn=.*/OnlyShowIn=GNOME;/' \
+      /etc/xdg/autostart/gnome-keyring-pkcs11.desktop || true
