@@ -81,6 +81,7 @@ packages:
   - fzf
   - ripgrep
   - fd-find
+  - yazi
   - gh
 
   # === HARDWARE & SYSTEM ===
