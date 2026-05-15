@@ -11,6 +11,8 @@ path = [
   "comps-sync-exclude-list.yml",
   "group",
   "passwd",
+  "config/**",
+  "*.pub",
 ]
 SPDX-FileCopyrightText = [
     "Fedora Atomic Desktops maintainers",
