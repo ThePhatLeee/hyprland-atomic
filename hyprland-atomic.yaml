@@ -5,6 +5,7 @@ include:
 repos:
   - lionheartp-Hyprland-rawhide
   - atim-starship-rawhide
+  - lihaohong-yazi-rawhide
   - fedora-rawhide
   # - fedora
   # - updates
